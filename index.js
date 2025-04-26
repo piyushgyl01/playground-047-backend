@@ -21,6 +21,15 @@ app.get("/", (req, res) => {
   res.json("Startups Database! Browse your favorite startup");
 });
 
+// async function insertData(data) {
+//   try {
+//     const savedData = await Startup.insertMany(data);
+//     console.log(savedData);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
 app.get("/startups", async (req, res) => {
   try {
     const startups = await Startup.find();
@@ -54,6 +63,26 @@ app.post("/startups", async (req, res) => {
     const newStartup = new Startup({ name, description, founder });
     const savedStartup = await newStartup.save();
     res.status(201).json(savedStartup);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+app.put("/startups/:id", async (req, res) => {
+  try {
+    const editedStartup = await Startup.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    if (!editedStartup) {
+      return res.status(404).json({ message: "Unable to find the startup" });
+    }
+
+    res.json(editedStartup);
   } catch (error) {
     res
       .status(500)
