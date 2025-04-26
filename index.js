@@ -90,6 +90,25 @@ app.put("/startups/:id", async (req, res) => {
   }
 });
 
+app.delete("/startups/:id", async (req, res) => {
+  try {
+    const deletedStartup = await Startup.findByIdAndDelete(req.params.id);
+
+    if (!deletedStartup) {
+      return res.status(404).json({ message: "Unable to find the startup" });
+    }
+
+    res.json({
+      deletedStartup: deletedStartup,
+      message: "Deleted successfully",
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
 app.listen(4000, () => {
   console.log("Server is running on PORT 4000");
 });
