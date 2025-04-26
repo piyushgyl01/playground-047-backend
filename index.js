@@ -16,7 +16,7 @@ const Startup = require("./models/startup.model");
 const User = require("./models/user.model");
 
 const corsOptions = {
-  origin: "http://localhost:5173", 
+  origin: "http://localhost:5173",
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -75,7 +75,7 @@ function setAuthCookies(res, accessToken, refreshToken) {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    path: "/auth/refresh-token", // Fixed path to match actual endpoint
+    path: "/auth/refresh-token",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 }
@@ -83,16 +83,16 @@ function setAuthCookies(res, accessToken, refreshToken) {
 function clearAuthCookies(res) {
   res.cookie("access_token", "", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: true,
+    sameSite: "none",
     maxAge: 0,
   });
 
   res.cookie("refresh_token", "", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    path: "/auth/refresh-token", // Fixed path to match endpoint
+    secure: true,
+    sameSite: "none",
+    path: "/auth/refresh-token",
     maxAge: 0,
   });
 }
