@@ -16,7 +16,10 @@ const Startup = require("./models/startup.model");
 const User = require("./models/user.model");
 
 const corsOptions = {
-  origin: "https://playground-047-frontend.vercel.app",
+  origin: [
+    "https://playground-047-frontend.vercel.app",
+    "http://localhost:5173",
+  ],
   credentials: true,
   optionsSuccessStatus: 200,
 };
