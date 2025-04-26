@@ -30,6 +30,15 @@ app.get("/startups", async (req, res) => {
   }
 });
 
+app.get("/startups/:id", async (req, res) => {
+  try {
+    const startup = await Startup.findById(req.params.id);
+    res.json(startup)
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.listen(4000, () => {
   console.log("Server is running on PORT 4000");
 });
