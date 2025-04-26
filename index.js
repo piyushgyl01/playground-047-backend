@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 app.get("/startups", async (req, res) => {
   try {
     const startups = await Startup.find();
-    res.json(startups)
+    res.json(startups);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -33,9 +33,31 @@ app.get("/startups", async (req, res) => {
 app.get("/startups/:id", async (req, res) => {
   try {
     const startup = await Startup.findById(req.params.id);
-    res.json(startup)
+    res.json(startup);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+app.post("/startups", async (req, res) => {
+  const { name, description, founder } = req.body;
+
+  if (!name || !description || !founder) {
+    return res
+      .status(404)
+      .json({ message: "Please fill in all the required fields" });
+  }
+
+  try {
+    const newStartup = new Startup({ name, description, founder });
+    const savedStartup = await newStartup.save();
+    res.status(201).json(savedStartup);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
